@@ -12,6 +12,7 @@ import android.support.test.uiautomator.UiObject2;
 import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.Until;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,8 +30,8 @@ import static org.junit.Assert.assertThat;
 public class CalculatorTest extends Common_Method {
     private static final int LAUNCH_TIMEOUT = 5000;
 
-    @Before
     @Override
+    @Before
     public void setUp() throws RemoteException{
         super.setUp();
     }
@@ -60,6 +61,10 @@ public class CalculatorTest extends Common_Method {
 
     }
 
+    @After
+    public void tearDown() throws RemoteException{
+        super.tearDown();
+    }
 
 
     private String getLauncherPackageName() {

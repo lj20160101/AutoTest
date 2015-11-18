@@ -8,6 +8,7 @@ import android.support.test.filters.SdkSuppress;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.BySelector;
+import android.support.test.uiautomator.Configurator;
 import android.support.test.uiautomator.IAutomationSupport;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject;
@@ -15,8 +16,10 @@ import android.support.test.uiautomator.UiObject2;
 import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiSelector;
 import android.support.test.uiautomator.UiWatcher;
+import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
 
+import org.junit.Before;
 import org.junit.runner.RunWith;
 
 import java.io.ByteArrayOutputStream;
@@ -86,10 +89,10 @@ public class Common_Method  {
     // Define sdcard root directory
     public final String ROOT_DIR = "/sdcard";
 
-    protected void setUp() throws RemoteException {
+
+    protected void setUp() throws RemoteException{
         Instrumentation instrumentation = InstrumentationRegistry.getInstrumentation();
         mDevice = UiDevice.getInstance(instrumentation);
-
         registerCommonWatcher();
         listApps = initListApps();
         if (!mDevice.isScreenOn()) {
@@ -97,7 +100,6 @@ public class Common_Method  {
             sleepInt(1);
         }
         unLockDevice();
-        press_back(5);
         mDevice.pressHome();
     }
 
@@ -106,6 +108,7 @@ public class Common_Method  {
         // log(getName() + " tearDown()----------");
         // System.out.println("*********************************");
         press_back(2);
+        press_home(1);
         System.out.println("The mDevice type is: " + android.os.Build.MODEL);
 
         unregisterCommonWatcher();
@@ -597,7 +600,7 @@ public class Common_Method  {
         System.out.println("press home key "+times+" times");
     }
 
-    // continues actions up down left right center home
+
     public void press_keyevent(int times, int keycode) {
         if (times < 1)
             return;
@@ -672,25 +675,20 @@ public class Common_Method  {
                 (int) (mDevice.getDisplayHeight() * 0.72),
                 (int) (mDevice.getDisplayWidth() * 0.37),
                 (int) (mDevice.getDisplayHeight() * 0.117), 50);
-        // mDevice.swipe(538, 1847, 538, 300, 80);
-        // mDevice.swipe(538, 1847, 538, 300, 80);
-        // mDevice.swipe(538, 1847, 538, 300, 80);
+
     }
 
     // check the ANR and force close
     private void registerCommonWatcher() {
         UiWatcher anrWatcher = new UiWatcher() {
             public boolean checkForCondition() {
-                UiObject2 anrWindows = mDevice.findObject(By.res("无响应"));
-                if (anrWindows.hasObject(By.res("无响应"))) {
-                    screenShot();
+                UiObject anrWindows = new UiObject(new UiSelector().text("无响应"));
+                if (anrWindows.exists()){
+                   screenShot();
                     try {
-                        UiObject ok1 = new UiObject(new UiSelector().className(
-                                "android.widget.Button").text("OK"));
+
                         UiObject ok2 = new UiObject(new UiSelector().text("确定"));
-                        if (ok1.exists()) {
-                            ok1.click();
-                        } else if (ok2.exists()) {
+                        if (ok2.exists()) {
                             ok2.click();
                         }
 
